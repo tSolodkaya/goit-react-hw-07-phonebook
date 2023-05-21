@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Notiflix from 'notiflix';
-import { nanoid } from 'nanoid';
 
 import css from './ContactForm.module.css';
-import { addContact } from 'redux/contactSlice';
+import { addContact } from 'redux/operations';
+import { getContact } from 'redux/selectors';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const stateContacts = useSelector(state => state.phonebook.contacts);
+  const stateContacts = useSelector(getContact);
 
   const dispatch = useDispatch();
 
@@ -38,13 +38,11 @@ const ContactForm = () => {
     if (isContactInBook) {
       return Notiflix.Notify.failure(`${name} is already in contacts`);
     }
-
-    const contactId = nanoid();
+    console.log(stateContacts);
 
     const contact = {
       name: name,
       number: number,
-      id: contactId,
     };
 
     dispatch(addContact(contact));
